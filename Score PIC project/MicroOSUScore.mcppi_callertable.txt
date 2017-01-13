@@ -1,0 +1,4 @@
+main
+	initialize
+	update
+interrupt
