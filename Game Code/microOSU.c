@@ -16,8 +16,17 @@ sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
 
+
+// TODO: Implement Antons code to interface with keypad
+// https://electrosome.com/matrix-keypad-pic-microcontroller/
+/* #define KEYPAD_ROWS (3)
+#define KEYPAD_COLS (4)
+
+char keypadPort at PortA;
+char keypad[KEYPAD_ROWS][KEYPAD_COLS];
+
 void initialize();
-void update();
+void update(); */
 
 
 void main() {
