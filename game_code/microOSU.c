@@ -23,11 +23,27 @@ sbit LCD_D7_Direction at TRISB3_bit;
 #define KEYPAD_COLS (4)
 
 char keypadPort at PortA;
-char keypad[KEYPAD_ROWS][KEYPAD_COLS];
+char keypad[KEYPAD_ROWS][KEYPAD_COLS];*/
 
 void initialize();
-void update(); */
+void update();
+int fetchKeypadValue();
 
+int isButtonDown = 0; // 1 = down, 0 = up
+
+/*
+  Keypad layout
+  1 2 3
+  4 5 6
+  7 8 9
+  * 0 #
+*/
+int keypadLayout[] = {
+  0b00000000, 0b00010000, 0b00100000,
+  0b00110000, 0b01000000, 0b01010000,
+  0b01100000, 0b01110000, 0b10000000,
+  0b10010000, 0b10100000, 0b10110000};
+};
 
 void main() {
    initialize();
@@ -37,7 +53,7 @@ void main() {
 void initialize() {
 
    INTCON = 0;
-   //OSCCON = 0b01110111;            // Oscillator 8 MHz (Oscillator control)
+   OSCCON = 0b01110111;            // Oscillator 8 MHz (Oscillator control)
    ANSEL = 0b00000000;             // No analog inputs
    ANSELH = 0b00000000;            // No analog inputs
 
@@ -48,59 +64,51 @@ void initialize() {
    PORTB = 0b00000000;
    PORTC = 0b00000000;
 
-   /*OPTION_REG.T0SE = 0; // Choose to work with internal clock
+   OPTION_REG.T0SE = 0; // Choose to work with internal clock
    OPTION_REG.T0CS = 0; // Choose to react on low2high edge
    INTCON.GIE = 1;   // Enable global interrupt bit
    INTCON.T0IE = 1; // Enable Timer0 overflow interrupt bit
-   */
 
-   // Hardware setup
-   Lcd_Init();
-   //Lcd_Cmd(_LCD_CLEAR);
-   Lcd_Cmd(_LCD_CURSOR_OFF);
+   INTCON.GIE = 1;
+   INTCON.RBIE = 1;
+   INTCON.RBIF = 0;
+   OPTION_REG.F7 = 0;
 
-   // LCD_RS = 0;    // Set the LCD pointer to memory switch mode
-   //LCD_Cmd(128);  // Set the pointer to position 128 in the LCD memory, where the display memory is located
-  // LCD_RS = 1;    // Set the pointer to write mode, so that memory can be written
+   IOCB.F5 = 1;
+   IOCB.F6 = 1;
+   IOCB.F7 = 1;
 
+   WPUB.F5 = 1;
+   WPUB.F6 = 1;
+   WPUB.F7 = 1;
 
-
-  Lcd_Rs = 0;
-  Lcd_Cmd(64);
-  Lcd_Rs = 1;
-
-  LCD_Chr_Cp(0b00001110);
-  LCD_Chr_Cp(0b00010101);
-  LCD_Chr_Cp(0b00010001);
-  LCD_Chr_Cp(0b00011111);
-  LCD_Chr_Cp(0b00010001);
-  LCD_Chr_Cp(0b00010001);
-  LCD_Chr_Cp(0b00010001);
-  LCD_Chr_Cp(0b00000000);
-
-  Lcd_Rs = 1;
 }
 
 void update() {
-    char i;
-    Lcd_Out(1, 1, "HEJ OCH ");
-    Lcd_Chr_Cp(0);
-    for(i=0; i<5; i++) {
-        LCD_Chr(2, i+1, 49+i);
-    }
-    for(i=0; i<5; i++) {
-        LCD_Chr(3, 1+i, 65+i);
-    }
-    while(1==1) {
-       for(i=0; i<16; i++) {
-           Lcd_Cmd( (i<=7) ? _LCD_SHIFT_RIGHT : _LCD_SHIFT_LEFT);
-           Delay_ms(500);
-       }
-    }
+  while(1==1) {}
 }
 
-/*void interrupt() {
+void interrupt() {
+
+  // Timer0: Internal interrupt
    if(INTCON.T0IE == 1) {
       INTCON.T0IE = 0;
+      PORTC.F0 = ~PORTC.F0;
    }
-} */
+
+   // External interrupt
+   if(INTCON.RBIF == 1) {
+      INTCON.RBIF = 0;
+      if(isButtonDown == 0) {
+        isButtonDown = 1;
+
+        PORTC = keypadLayout[getKeypadValue()];
+      }
+      else { isButtonDown = 0; }
+   }
+
+}
+
+int fetchKeypadValue() {
+  return 7;
+}
