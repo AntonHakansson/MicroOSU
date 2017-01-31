@@ -66,10 +66,7 @@ void initialize() {
 }
 
 void update() {
-  /*while(1) {
-    LCD_Chr(2, 2, 0);
-  }*/
-  /*char i;
+  char i;
   Lcd_Out(1, 1, "HEJ OCH ");
   Lcd_Chr_Cp(0);
   for(i=0; i<5; i++) {
@@ -83,9 +80,10 @@ void update() {
          Lcd_Cmd( (i<=7) ? _LCD_SHIFT_RIGHT : _LCD_SHIFT_LEFT);
          Delay_ms(500);
      }
-  }*/
+     Lcd_Out(4, 1, input());
+  }
 
-  char input();
+
 }
 
 char input(){
