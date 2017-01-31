@@ -47,7 +47,9 @@ int keypadLayout[] = {
 
 void main() {
    initialize();
-   update();
+   while(1) {
+     update();
+   }
 }
 
 void initialize() {
@@ -84,10 +86,7 @@ void initialize() {
 
 }
 
-void update() {
-  while(1==1) {}
-}
-
+void update() {}
 void interrupt() {
 
   // Timer0: Internal interrupt
@@ -111,4 +110,18 @@ void interrupt() {
 
 int fetchKeypadValue() {
   return 7;
+
+  /*int i;
+  for(i = 0; i < 4; i++) {
+    PORTB.F3 = (i != 0 ? 1:0);
+    PORTB.F2 = (i != 1 ? 1:0);
+    PORTB.F1 = (i != 2 ? 1:0);
+    PORTB.F0 = (i != 3 ? 1:0);
+
+    if(PORTB.F5 == 0) { return i*3; }  //inputValue[0][0];
+    if(PORTB.F6 == 0) { return 1+i*3; }  //inputValue[0][1];
+    if(PORTB.F7 == 0) { return 2+i*3; }  //inputValue[0][2];
+  }*/
+
+  return 0;
 }
