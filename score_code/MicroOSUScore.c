@@ -21,7 +21,9 @@ char input();
 
 void main() {
    initialize();
-   update();
+   while(1) {
+     update();
+   }
 }
 
 void initialize() {
@@ -67,40 +69,33 @@ void initialize() {
 
 void update() {
   char i;
-  Lcd_Out(1, 1, "HEJ OCH ");
-  Lcd_Chr_Cp(0);
   for(i=0; i<5; i++) {
       LCD_Chr(2, i+1, 49+i);
   }
+
   for(i=0; i<5; i++) {
       LCD_Chr(3, 1+i, 65+i);
   }
-  while(1==1) {
-     for(i=0; i<16; i++) {
-         Lcd_Cmd( (i<=7) ? _LCD_SHIFT_RIGHT : _LCD_SHIFT_LEFT);
-         Delay_ms(500);
-     }
-     Lcd_Out(4, 1, input());
-  }
 
-
+   Lcd_Cmd(_LCD_CLEAR);
+   Lcd_Out(4, 1, input());
+   delay_ms(100);
 }
 
 char input(){
 
-    if(PORTC=0b00000000)return '0';
-    if(PORTC=0b00010000)return '1';
-    if(PORTC=0b00100000)return '2';
-    if(PORTC=0b00110000)return '3';
-    if(PORTC=0b01000000)return '4';
-    if(PORTC=0b01010000)return '5';
-    if(PORTC=0b01100000)return '6';
-    if(PORTC=0b01110000)return '7';
-    if(PORTC=0b10000000)return '8';
-    if(PORTC=0b10010000)return '9';
-    if(PORTC=0b10100000)return '#';
-    if(PORTC=0b10110000)return '*';
-
+  if(PORTC = 0b00000000) return '0';
+  if(PORTC = 0b00010000) return '1';
+  if(PORTC = 0b00100000) return '2';
+  if(PORTC = 0b00110000) return '3';
+  if(PORTC = 0b01000000) return '4';
+  if(PORTC = 0b01010000) return '5';
+  if(PORTC = 0b01100000) return '6';
+  if(PORTC = 0b01110000) return '7';
+  if(PORTC = 0b10000000) return '8';
+  if(PORTC = 0b10010000) return '9';
+  if(PORTC = 0b10100000) return '#';
+  if(PORTC = 0b10110000) return '*';
 
   return -1;
 }
