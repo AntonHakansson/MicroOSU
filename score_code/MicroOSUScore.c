@@ -16,6 +16,7 @@ sbit LCD_D7_Direction at TRISB3_bit;
 
 void initialize();
 void update();
+char input();
 
 
 void main() {
@@ -32,7 +33,7 @@ void initialize() {
 
    TRISA = 0b00000000;
    TRISB = 0b00000000;
-   TRISC = 0b00000000;
+   TRISC = 0b11111111;
    PORTA = 0b00000000;
    PORTB = 0b00000000;
    PORTC = 0b00000000;
@@ -65,9 +66,6 @@ void initialize() {
 }
 
 void update() {
-  /*while(1) {
-    LCD_Chr(2, 2, 0);
-  }*/
   char i;
   Lcd_Out(1, 1, "HEJ OCH ");
   Lcd_Chr_Cp(0);
@@ -82,5 +80,27 @@ void update() {
          Lcd_Cmd( (i<=7) ? _LCD_SHIFT_RIGHT : _LCD_SHIFT_LEFT);
          Delay_ms(500);
      }
+     Lcd_Out(4, 1, input());
   }
+
+
+}
+
+char input(){
+
+    if(PORTC=0b00000000)return '0';
+    if(PORTC=0b00010000)return '1';
+    if(PORTC=0b00100000)return '2';
+    if(PORTC=0b00110000)return '3';
+    if(PORTC=0b01000000)return '4';
+    if(PORTC=0b01010000)return '5';
+    if(PORTC=0b01100000)return '6';
+    if(PORTC=0b01110000)return '7';
+    if(PORTC=0b10000000)return '8';
+    if(PORTC=0b10010000)return '9';
+    if(PORTC=0b10100000)return '#';
+    if(PORTC=0b10110000)return '*';
+
+
+  return -1;
 }
