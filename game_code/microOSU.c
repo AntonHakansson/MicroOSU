@@ -27,7 +27,7 @@ char keypad[KEYPAD_ROWS][KEYPAD_COLS];*/
 
 void initialize();
 void update();
-int fetchKeypadValue();
+int getKeypadValue();
 
 int isButtonDown = 0; // 1 = down, 0 = up
 
@@ -42,7 +42,7 @@ int keypadLayout[] = {
   0b00000000, 0b00010000, 0b00100000,
   0b00110000, 0b01000000, 0b01010000,
   0b01100000, 0b01110000, 0b10000000,
-  0b10010000, 0b10100000, 0b10110000};
+  0b10010000, 0b10100000, 0b10110000
 };
 
 void main() {
@@ -108,7 +108,7 @@ void interrupt() {
 
 }
 
-int fetchKeypadValue() {
+int getKeypadValue() {
   return 7;
 
   /*int i;
