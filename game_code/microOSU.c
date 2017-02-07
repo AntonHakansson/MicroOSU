@@ -80,9 +80,9 @@ void initialize() {
    IOCB.F6 = 1;
    IOCB.F7 = 1;
 
-   WPUB.F5 = 1;
-   WPUB.F6 = 1;
-   WPUB.F7 = 1;
+   //WPUB.F5 = 1;
+   //WPUB.F6 = 1;
+   //WPUB.F7 = 1;
 
 }
 
@@ -103,7 +103,10 @@ void interrupt() {
 
         PORTC = keypadLayout[getKeypadValue()];
       }
-      else { isButtonDown = 0; }
+      else {
+        isButtonDown = 0;
+        PORTC = keypadLayout[0];
+      }
    }
 
 }
