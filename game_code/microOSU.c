@@ -59,12 +59,12 @@ void initialize() {
    ANSEL = 0b00000000;             // No analog inputs
    ANSELH = 0b00000000;            // No analog inputs
 
-   TRISA = 0b11111111;
-   TRISB = 0b00000000;
+   TRISA = 0b00000000;
+   TRISB = 0b11111111;
    TRISC = 0b00000000;
    PORTA = 0b00000000;
    PORTB = 0b00000000;
-   PORTC = 0b00000000;
+   PORTC = 0b00001111;
 
    OPTION_REG.T0SE = 0; // Choose to work with internal clock
    OPTION_REG.T0CS = 0; // Choose to react on low2high edge
