@@ -16,7 +16,7 @@ sbit LCD_D7_Direction at TRISB3_bit;
 
 void initialize();
 void update();
-char input();
+char getKeypadInput();
 
 
 void main() {
@@ -69,6 +69,7 @@ void initialize() {
 
 void update() {
   char i;
+  Lcd_Cmd(_LCD_CLEAR);
   for(i=0; i<5; i++) {
       LCD_Chr(2, i+1, 49+i);
   }
@@ -77,25 +78,25 @@ void update() {
       LCD_Chr(3, 1+i, 65+i);
   }
 
-   Lcd_Cmd(_LCD_CLEAR);
-   Lcd_Out(4, 1, input());
+   for(i=0; i<5; i++) {
+      Lcd_Chr(4, 1+i, getKeypadInput());
+   }
    delay_ms(100);
 }
 
-char input(){
+char getKeypadInput(){
 
-  if(PORTC = 0b00000000) return '0';
-  if(PORTC = 0b00010000) return '1';
-  if(PORTC = 0b00100000) return '2';
-  if(PORTC = 0b00110000) return '3';
-  if(PORTC = 0b01000000) return '4';
-  if(PORTC = 0b01010000) return '5';
-  if(PORTC = 0b01100000) return '6';
-  if(PORTC = 0b01110000) return '7';
-  if(PORTC = 0b10000000) return '8';
-  if(PORTC = 0b10010000) return '9';
-  if(PORTC = 0b10100000) return '#';
-  if(PORTC = 0b10110000) return '*';
+  if(PORTC == 0b00000000) return '0';
+  if(PORTC == 0b00010000) return '1';
+  if(PORTC == 0b00100000) return '2';
+  if(PORTC == 0b00110000) return '3';
+  if(PORTC == 0b01000000) return '4';
+  if(PORTC == 0b01010000) return '5';
+  if(PORTC == 0b01100000) return '6';
+  if(PORTC == 0b01110000) return '7';
+  if(PORTC == 0b10000000) return '8';
+  if(PORTC == 0b10010000) return '9';
+  if(PORTC == 0b10100000) return '#';
 
-  return -1;
+  return '?';
 }
