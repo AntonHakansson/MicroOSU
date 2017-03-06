@@ -78,9 +78,7 @@ void update() {
       LCD_Chr(3, 1+i, 65+i);
   }
 
-   for(i=0; i<5; i++) {
-      Lcd_Chr(4, 1+i, getKeypadInput());
-   }
+   Lcd_Chr(4, 1, getKeypadInput());
    delay_ms(100);
 }
 

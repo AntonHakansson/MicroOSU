@@ -27,7 +27,7 @@ char keypad[KEYPAD_ROWS][KEYPAD_COLS];*/
 
 void initialize();
 void update();
-char getKeypadValue();
+int getKeypadValue();
 
 int isButtonDown = 0; // 1 = down, 0 = up
 
@@ -60,11 +60,11 @@ void initialize() {
    ANSELH = 0b00000000;            // No analog inputs
 
    TRISA = 0b00000000;
-   TRISB = 0b11111111;
+   TRISB = 0b11110000;
    TRISC = 0b00000000;
    PORTA = 0b00000000;
    PORTB = 0b00000000;
-   PORTC = 0b00001111;
+   PORTC = 0b00000000;
 
    INTCON.GIE = 1;      // Enable global interrupts
    INTCON.INTE = 1;     // Enable external interrupts
@@ -93,7 +93,7 @@ void interrupt() {
   // Timer0: Internal interrupt
    if(INTCON.T0IE == 1) {
       INTCON.T0IE = 0;
-      PORTC.F0 = ~PORTC.F0;
+      //PORTC.F0 = ~PORTC.F0;
    }
 
    // External interrupt
@@ -112,20 +112,18 @@ void interrupt() {
 
 }
 
-char getKeypadValue() {
-  return 7;
-
-  /*int i;
+int getKeypadValue() {
+  int i;
   for(i = 0; i < 4; i++) {
-    PORTB.F3 = (i != 0 ? 1:0);
-    PORTB.F2 = (i != 1 ? 1:0);
-    PORTB.F1 = (i != 2 ? 1:0);
-    PORTB.F0 = (i != 3 ? 1:0);
+    PORTB.F3 = (i != 0 ? 1:0);  // Row 1
+    PORTB.F2 = (i != 1 ? 1:0);  // Row 2
+    PORTB.F1 = (i != 2 ? 1:0);  // Row 3
+    PORTB.F0 = (i != 3 ? 1:0);  // Row 4
 
-    if(PORTB.F5 == 0) { return i*3; }  //inputValue[0][0];
-    if(PORTB.F6 == 0) { return 1+i*3; }  //inputValue[0][1];
-    if(PORTB.F7 == 0) { return 2+i*3; }  //inputValue[0][2];
-  }*/
-
+    if(PORTB.F5 == 0) { return i*3; }
+    if(PORTB.F6 == 0) { return 1+i*3; }
+    if(PORTB.F7 == 0) { return 2+i*3; }
+  }
+  PORTB = 0b00000000;
   return 0;
 }
