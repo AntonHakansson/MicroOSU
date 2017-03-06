@@ -84,7 +84,7 @@ void update() {
    delay_ms(100);
 }
 
-char getKeypadInput(){
+char getKeypadInput() {
 
   if(PORTC == 0b00000000) return '0';
   if(PORTC == 0b00010000) return '1';

@@ -1,5 +1,5 @@
-#define CLOCK_FREQUENCY (8)
-
+//#define CLOCK_FREQUENCY (8)
+/*
 sbit LCD_RS at RB4_bit; // RS på LCD: n ansluts till B4 på PIC:en
 sbit LCD_EN at RB5_bit; // E(Enable på LCD: n ansluts till B5 på PIC:en
 
@@ -7,14 +7,14 @@ sbit LCD_D4 at RB0_bit; // D4 på LCD: n ansluts till B0 på PIC:en
 sbit LCD_D5 at RB1_bit; // D5 på LCD: n ansluts till B1 på PIC:en
 sbit LCD_D6 at RB2_bit; // D6 på LCD: n ansluts till B2 på PIC:en
 sbit LCD_D7 at RB3_bit; // D7 på LCD: n ansluts till B3 på PIC:en
-
+*/
 // Tell mirco processor how it is connected to the LCD display
-sbit LCD_RS_Direction at TRISB4_bit;
+/*sbit LCD_RS_Direction at TRISB4_bit;
 sbit LCD_EN_Direction at TRISB5_bit;
 sbit LCD_D4_Direction at TRISB0_bit;
 sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
-sbit LCD_D7_Direction at TRISB3_bit;
+sbit LCD_D7_Direction at TRISB3_bit;*/
 
 
 // TODO: Implement Antons code to interface with keypad
@@ -27,7 +27,7 @@ char keypad[KEYPAD_ROWS][KEYPAD_COLS];*/
 
 void initialize();
 void update();
-int getKeypadValue();
+char getKeypadValue();
 
 int isButtonDown = 0; // 1 = down, 0 = up
 
@@ -54,7 +54,7 @@ void main() {
 
 void initialize() {
 
-   INTCON = 0;
+   INTCON = 0b00000000;
    OSCCON = 0b01110111;            // Oscillator 8 MHz (Oscillator control)
    ANSEL = 0b00000000;             // No analog inputs
    ANSELH = 0b00000000;            // No analog inputs
@@ -66,23 +66,24 @@ void initialize() {
    PORTB = 0b00000000;
    PORTC = 0b00001111;
 
-   OPTION_REG.T0SE = 0; // Choose to work with internal clock
-   OPTION_REG.T0CS = 0; // Choose to react on low2high edge
-   INTCON.GIE = 1;   // Enable global interrupt bit
-   INTCON.T0IE = 1; // Enable Timer0 overflow interrupt bit
+   INTCON.GIE = 1;      // Enable global interrupts
+   INTCON.INTE = 1;     // Enable external interrupts
+   INTCON.INTF = 0;     // Clear flag
+   INTCON.T0IE = 0;     // Enable Timer0 overflow interrupt bit
+   INTCON.T0IF = 0;     // Clear flag
+   INTCON.RBIE = 1;     // Enable Interrupt on change
+   INTCON.RBIF = 0;     // Clear flag
 
-   INTCON.GIE = 1;
-   INTCON.RBIE = 1;
-   INTCON.RBIF = 0;
-   OPTION_REG.NOT_RBPU = 0;
+   OPTION_REG.T0CS = 0; // Use internal clock source
+   OPTION_REG.PSA = 0;  // Use timer0 PSA
+   OPTION_REG.PS2 = 0;  // PSA bit 2
+   OPTION_REG.PS1 = 1;  // PSA bit 1
+   OPTION_REG.PS0 = 0;  // PSA bit 0
 
+   // Enable interrupt on change for individual pins on port B
    IOCB.F5 = 1;
    IOCB.F6 = 1;
    IOCB.F7 = 1;
-
-   WPUB.F5 = 1;
-   WPUB.F6 = 1;
-   WPUB.F7 = 1;
 
 }
 
@@ -97,31 +98,22 @@ void interrupt() {
 
    // External interrupt
    if(INTCON.RBIF == 1) {
-      INTCON.RBIF = 0;
-      if(isButtonDown == 0) {
+     PORTC = keypadLayout[getKeypadValue()];
+     /*if(isButtonDown == 0) {
         isButtonDown = 1;
         PORTC = keypadLayout[getKeypadValue()];
       }
       else {
         isButtonDown = 0;
         PORTC = keypadLayout[0];
-      }
+      }*/
+      INTCON.RBIF = 0;
    }
 
 }
 
-int getKeypadValue() {
+char getKeypadValue() {
   return 7;
-  /*char i, j;
-
-  for(i=0; i<keypadRows; i++) {
-    PORTB = ~(0b0001000 >> i);
-     for(j=0; j<keypadCols; j++) {
-      if(PORTB&(0b00100000 << j) == 0) {
-
-      }
-     }
-  }*/
 
   /*int i;
   for(i = 0; i < 4; i++) {
@@ -134,8 +126,6 @@ int getKeypadValue() {
     if(PORTB.F6 == 0) { return 1+i*3; }  //inputValue[0][1];
     if(PORTB.F7 == 0) { return 2+i*3; }  //inputValue[0][2];
   }*/
-  
-  
-  
+
   return 0;
 }
