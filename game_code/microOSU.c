@@ -85,6 +85,9 @@ void initialize() {
    IOCB.F6 = 1;
    IOCB.F7 = 1;
 
+   char seed;
+   srand(seed);
+
 }
 
 void update() {}
@@ -98,7 +101,9 @@ void interrupt() {
 
    // External interrupt
    if(INTCON.RBIF == 1) {
-     PORTC = keypadLayout[getKeypadValue()];
+     //PORTC = (PORTB & 0b00001111);
+     //PORTC = keypadLayout[getKeypadValue()];
+     PORTC = keypadLayout[rand() % 12];
      /*if(isButtonDown == 0) {
         isButtonDown = 1;
         PORTC = keypadLayout[getKeypadValue()];
