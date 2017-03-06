@@ -74,15 +74,15 @@ void initialize() {
    INTCON.GIE = 1;
    INTCON.RBIE = 1;
    INTCON.RBIF = 0;
-   OPTION_REG.F7 = 0;
+   OPTION_REG.NOT_RBPU = 0;
 
    IOCB.F5 = 1;
    IOCB.F6 = 1;
    IOCB.F7 = 1;
 
-   //WPUB.F5 = 1;
-   //WPUB.F6 = 1;
-   //WPUB.F7 = 1;
+   WPUB.F5 = 1;
+   WPUB.F6 = 1;
+   WPUB.F7 = 1;
 
 }
 
@@ -100,7 +100,6 @@ void interrupt() {
       INTCON.RBIF = 0;
       if(isButtonDown == 0) {
         isButtonDown = 1;
-
         PORTC = keypadLayout[getKeypadValue()];
       }
       else {
@@ -113,6 +112,16 @@ void interrupt() {
 
 int getKeypadValue() {
   return 7;
+  /*char i, j;
+
+  for(i=0; i<keypadRows; i++) {
+    PORTB = ~(0b0001000 >> i);
+     for(j=0; j<keypadCols; j++) {
+      if(PORTB&(0b00100000 << j) == 0) {
+
+      }
+     }
+  }*/
 
   /*int i;
   for(i = 0; i < 4; i++) {
@@ -125,6 +134,8 @@ int getKeypadValue() {
     if(PORTB.F6 == 0) { return 1+i*3; }  //inputValue[0][1];
     if(PORTB.F7 == 0) { return 2+i*3; }  //inputValue[0][2];
   }*/
-
+  
+  
+  
   return 0;
 }
