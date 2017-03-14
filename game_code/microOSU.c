@@ -81,9 +81,9 @@ void initialize() {
    OPTION_REG.PS0 = 0;  // PSA bit 0
 
    // Enable interrupt on change for individual pins on port B
-   IOCB.F5 = 1;
-   IOCB.F6 = 1;
-   IOCB.F7 = 1;
+   //IOCB.F5 = 1;
+   //IOCB.F6 = 1;
+   //IOCB.F7 = 1;
 
 }
 

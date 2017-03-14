@@ -78,7 +78,6 @@ void update() {
       LCD_Chr(3, 1+i, 65+i);
   }
 
-   //Lcd_Chr(4, 1, getKeypadInput());
    if(PORTC.F4) Lcd_Chr(4, 1, '1');
    else Lcd_Chr(4, 1, '0');
    if(PORTC.F5) Lcd_Chr(4, 2, '1');
@@ -87,6 +86,8 @@ void update() {
    else Lcd_Chr(4, 3, '0');
    if(PORTC.F7) Lcd_Chr(4, 4, '1');
    else Lcd_Chr(4, 4, '0');
+
+   Lcd_Chr(4, 6, getKeypadInput());
    delay_ms(100);
 }
 
