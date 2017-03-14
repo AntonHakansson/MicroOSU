@@ -69,7 +69,7 @@ void initialize() {
    INTCON.GIE = 1;      // Enable global interrupts
    INTCON.INTE = 1;     // Enable external interrupts
    INTCON.INTF = 0;     // Clear flag
-   INTCON.T0IE = 0;     // Enable Timer0 overflow interrupt bit
+   INTCON.T0IE = 0;     // Disable Timer0 overflow interrupt bit TODO: Enable
    INTCON.T0IF = 0;     // Clear flag
    INTCON.RBIE = 1;     // Enable Interrupt on change
    INTCON.RBIF = 0;     // Clear flag
@@ -85,10 +85,9 @@ void initialize() {
    IOCB.F6 = 1;
    IOCB.F7 = 1;
 
-   char seed;
-   srand(seed);
-
 }
+
+int counter = 0;
 
 void update() {}
 void interrupt() {
@@ -103,7 +102,8 @@ void interrupt() {
    if(INTCON.RBIF == 1) {
      //PORTC = (PORTB & 0b00001111);
      //PORTC = keypadLayout[getKeypadValue()];
-     PORTC = keypadLayout[rand() % 12];
+     PORTC = keypadLayout[counter % 12];
+     counter++;
      /*if(isButtonDown == 0) {
         isButtonDown = 1;
         PORTC = keypadLayout[getKeypadValue()];
