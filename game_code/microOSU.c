@@ -63,7 +63,7 @@ void initialize() {
    TRISB = 0b11110000;
    TRISC = 0b00000000;
    PORTA = 0b00000000;
-   PORTB = 0b00000000;
+   PORTB = 0b00001111;
    PORTC = 0b00000000;
 
    INTCON.GIE = 1;      // Enable global interrupts
@@ -119,6 +119,7 @@ void interrupt() {
 
 int getKeypadValue() {
   int i;
+  PORTB = 0b00001111;
   for(i = 0; i < 4; i++) {
     PORTB.F3 = (i != 0 ? 1:0);  // Row 1
     PORTB.F2 = (i != 1 ? 1:0);  // Row 2
@@ -129,6 +130,6 @@ int getKeypadValue() {
     if(PORTB.F6 == 0) { return 1+i*3; }
     if(PORTB.F7 == 0) { return 2+i*3; }
   }
-  PORTB = 0b00000000;
+  PORTB = 0b00001111;
   return 0;
 }
