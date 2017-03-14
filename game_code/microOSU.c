@@ -89,7 +89,10 @@ void initialize() {
 
 int counter = 0;
 
-void update() {}
+void update() {
+  PORTC = keypadLayout[getKeypadValue()];
+}
+
 void interrupt() {
 
   // Timer0: Internal interrupt
