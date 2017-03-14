@@ -82,11 +82,11 @@ void update() {
    if(PORTC.F4) Lcd_Chr(4, 1, '1');
    else Lcd_Chr(4, 1, '0');
    if(PORTC.F5) Lcd_Chr(4, 2, '1');
-   else Lcd_Chr(4, 1, '0');
+   else Lcd_Chr(4, 2, '0');
    if(PORTC.F6) Lcd_Chr(4, 3, '1');
-   else Lcd_Chr(4, 1, '0');
+   else Lcd_Chr(4, 3, '0');
    if(PORTC.F7) Lcd_Chr(4, 4, '1');
-   else Lcd_Chr(4, 1, '0');
+   else Lcd_Chr(4, 4, '0');
    delay_ms(100);
 }
 
