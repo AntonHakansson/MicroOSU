@@ -30,8 +30,9 @@ void initialize() {
 
    INTCON = 0;
    OSCCON = 0b01110111;            // Oscillator 8 MHz (Oscillator control)
-   ANSEL = 0b00000000;             // No analog inputs
-   ANSELH = 0b00000000;            // No analog inputs
+   ANSEL = 0b00000010;             // No analog inputs
+   ANSELH = 0b00000000;            // No ADC converter
+   ADCON1.VCFG0 = 1;
 
    TRISA = 0b00000000;
    TRISB = 0b00000000;
@@ -67,6 +68,12 @@ void initialize() {
 
 }
 
+int getTemp() {
+  double temp;
+  temp = (ADC_READ(1)/1024.0)*5000.0;
+  return temp/10.0;
+}
+
 void update() {
     char i;
     Lcd_Cmd(_LCD_CLEAR);
@@ -78,21 +85,23 @@ void update() {
         LCD_Chr(3, 1+i, 65+i);
     }
 
-   if(PORTC.F4) Lcd_Chr(4, 1, '1');
+   /*if(PORTC.F4) Lcd_Chr(4, 1, '1');
    else Lcd_Chr(4, 1, '0');
    if(PORTC.F5) Lcd_Chr(4, 2, '1');
    else Lcd_Chr(4, 2, '0');
    if(PORTC.F6) Lcd_Chr(4, 3, '1');
    else Lcd_Chr(4, 3, '0');
    if(PORTC.F7) Lcd_Chr(4, 4, '1');
-   else Lcd_Chr(4, 4, '0');
-
-   Lcd_Chr(4, 6, getKeypadInput());
+   else Lcd_Chr(4, 4, '0');*/
+   char tempValue[7];
+   IntToStr(getTemp(), tempValue);
+   Lcd_Out(4, 1, tempValue);
+   Lcd_Chr(3, 8, "\xDFC");
+   //Lcd_Chr(4, 6, getKeypadInput());
    delay_ms(100);
 }
 
 char getKeypadInput() {
-
   if(PORTC == 0b00000000) return '0';
   if(PORTC == 0b00010000) return '1';
   if(PORTC == 0b00100000) return '2';
@@ -104,6 +113,5 @@ char getKeypadInput() {
   if(PORTC == 0b10000000) return '8';
   if(PORTC == 0b10010000) return '9';
   if(PORTC == 0b10100000) return '#';
-
   return '?';
 }

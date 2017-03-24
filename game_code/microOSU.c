@@ -124,15 +124,15 @@ void interrupt() {
 int getKeypadValue() {
   int i;
   for(i = 0; i < 4; i++) {
-    PORTB.F3 = (i != 0 ? 1:0);  // Row 1
-    PORTB.F2 = (i != 1 ? 1:0);  // Row 2
-    PORTB.F1 = (i != 2 ? 1:0);  // Row 3
-    PORTB.F0 = (i != 3 ? 1:0);  // Row 4
+    PORTB.F3 = (i == 0 ? 1:0);  // Row 1
+    PORTB.F2 = (i == 1 ? 1:0);  // Row 2
+    PORTB.F1 = (i == 2 ? 1:0);  // Row 3
+    PORTB.F0 = (i == 3 ? 1:0);  // Row 4
 
-    if(PORTB.F5 == 0) { return i*3; }
-    if(PORTB.F6 == 0) { return 1+i*3; }
-    if(PORTB.F7 == 0) { return 2+i*3; }
+    if(PORTB.F5 == 1) { return i*3; }   // Col 1
+    if(PORTB.F6 == 1) { return 1+i*3; } // Col 2
+    if(PORTB.F7 == 1) { return 2+i*3; } // Col 3
   }
-  PORTB = 0b00000000;
+  PORTB = 0b00000000;e
   return 0;
 }
