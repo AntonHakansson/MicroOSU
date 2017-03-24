@@ -47,7 +47,7 @@ int keypadLayout[] = {
 
 void main() {
    initialize();
-   while(1) {
+   while(1==1) {
      update();
    }
 }
@@ -67,23 +67,21 @@ void initialize() {
    PORTC = 0b00000000;
 
    INTCON.GIE = 1;      // Enable global interrupts
-   INTCON.INTE = 1;     // Enable external interrupts
-   INTCON.INTF = 0;     // Clear flag
    INTCON.T0IE = 0;     // Disable Timer0 overflow interrupt bit TODO: Enable
    INTCON.T0IF = 0;     // Clear flag
-   INTCON.RBIE = 1;     // Enable Interrupt on change
+   INTCON.RBIE = 0;     // Enable Interrupt on change
    INTCON.RBIF = 0;     // Clear flag
 
    OPTION_REG.T0CS = 0; // Use internal clock source
-   OPTION_REG.PSA = 0;  // Use timer0 PSA
-   OPTION_REG.PS2 = 0;  // PSA bit 2
-   OPTION_REG.PS1 = 1;  // PSA bit 1
-   OPTION_REG.PS0 = 0;  // PSA bit 0
+   //OPTION_REG.PSA = 0;  // Use timer0 PSA
+   //OPTION_REG.PS2 = 0;  // PSA bit 2
+   //OPTION_REG.PS1 = 1;  // PSA bit 1
+   //OPTION_REG.PS0 = 0;  // PSA bit 0
 
    // Enable interrupt on change for individual pins on port B
-   //IOCB.F5 = 1;
-   //IOCB.F6 = 1;
-   //IOCB.F7 = 1;
+   IOCB.F5 = 1;
+   IOCB.F6 = 1;
+   IOCB.F7 = 1;
 
 }
 
@@ -96,17 +94,21 @@ void update() {
 void interrupt() {
 
   // Timer0: Internal interrupt
-   if(INTCON.T0IE == 1) {
+   /*if(INTCON.T0IE == 1) {
       INTCON.T0IE = 0;
-      //PORTC.F0 = ~PORTC.F0;
-   }
+      PORTC = keypadLayout[counter % 12];
+      counter++;
+   }*/
 
    // External interrupt
-   if(INTCON.RBIF == 1) {
+   //if(INTCON.RBIF == 1) {
+   //  INTCON.RBIF = 0;
      //PORTC = (PORTB & 0b00001111);
      //PORTC = keypadLayout[getKeypadValue()];
-     PORTC = keypadLayout[counter % 12];
-     counter++;
+
+     //PORTC = keypadLayout[counter % 12];
+     //counter++;
+
      /*if(isButtonDown == 0) {
         isButtonDown = 1;
         PORTC = keypadLayout[getKeypadValue()];
@@ -115,8 +117,7 @@ void interrupt() {
         isButtonDown = 0;
         PORTC = keypadLayout[0];
       }*/
-      INTCON.RBIF = 0;
-   }
+   //}
 
 }
 

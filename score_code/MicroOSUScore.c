@@ -35,7 +35,7 @@ void initialize() {
 
    TRISA = 0b00000000;
    TRISB = 0b00000000;
-   TRISC = 0b11111111;
+   TRISC = 0b11110000;
    PORTA = 0b00000000;
    PORTB = 0b00000000;
    PORTC = 0b00000000;
@@ -68,15 +68,15 @@ void initialize() {
 }
 
 void update() {
-  char i;
-  Lcd_Cmd(_LCD_CLEAR);
-  for(i=0; i<5; i++) {
-      LCD_Chr(2, i+1, 49+i);
-  }
+    char i;
+    Lcd_Cmd(_LCD_CLEAR);
+    for(i=0; i<5; i++) {
+        LCD_Chr(2, i+1, 49+i);
+    }
 
-  for(i=0; i<5; i++) {
-      LCD_Chr(3, 1+i, 65+i);
-  }
+    for(i=0; i<5; i++) {
+        LCD_Chr(3, 1+i, 65+i);
+    }
 
    if(PORTC.F4) Lcd_Chr(4, 1, '1');
    else Lcd_Chr(4, 1, '0');
