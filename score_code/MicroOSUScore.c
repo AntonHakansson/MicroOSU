@@ -79,6 +79,7 @@ int getTemp() {
 char tempValue[7];
 unsigned int tempV;
 char a, b, c, d;
+char* testText = "00.0";
 
 void update() {
 
@@ -114,10 +115,14 @@ void update() {
    b = tempV%10 + '48';
    c = tempV%100 + '48';
    d = tempV%1000 + '48';
-   Lcd_Out(6, 2, a);
-   Lcd_Out(7, 2, b);
-   Lcd_Out(6, 3, c);
-   Lcd_Out(6, 3, d);
+   Lcd_out(1, 4, testText[0]);
+   Lcd_out(1, 5, testText[1]);
+   Lcd_out(1, 6, testText[2]);
+   Lcd_out(1, 7, testText[3]);
+   Lcd_Out(2, 6, a);
+   Lcd_Out(2, 7, b);
+   Lcd_Out(3, 6, c);
+   Lcd_Out(3, 7, d);
 
    //Lcd_Chr(4, 6, getKeypadInput());
    delay_ms(1000);
