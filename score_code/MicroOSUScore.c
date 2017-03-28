@@ -73,10 +73,12 @@ void initialize() {
 int getTemp() {
   double temp = ADC_Read(1) >> 2;
   temp = (temp/1024.0)*5000.0;
-  return temp/10.0;
+  return temp;
+  //return temp/10.0;
 }
 char tempValue[7];
 unsigned int tempV;
+char a, b, c, d;
 
 void update() {
 
@@ -107,6 +109,16 @@ void update() {
    IntToStr(tempV%10, tempValue);
    Lcd_Out_Cp(Ltrim(tempValue));
    Lcd_Out_Cp("\xDFC");
+
+   a = tempV + '48';
+   b = tempV%10 + '48';
+   c = tempV%100 + '48';
+   d = tempV%1000 + '48';
+   Lcd_Out(6, 2, a);
+   Lcd_Out(7, 2, b);
+   Lcd_Out(6, 3, c);
+   Lcd_Out(6, 3, d);
+
    //Lcd_Chr(4, 6, getKeypadInput());
    delay_ms(1000);
 }
