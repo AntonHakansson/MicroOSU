@@ -73,8 +73,11 @@ int getTemp() {
   temp = (ADC_READ(1)/1024.0)*5000.0;
   return temp/10.0;
 }
+char tempValue[7];
+unsigned int tempV;
 
 void update() {
+
     char i;
     Lcd_Cmd(_LCD_CLEAR);
     for(i=0; i<5; i++) {
@@ -93,10 +96,15 @@ void update() {
    else Lcd_Chr(4, 3, '0');
    if(PORTC.F7) Lcd_Chr(4, 4, '1');
    else Lcd_Chr(4, 4, '0');*/
-   char tempValue[7];
-   IntToStr(getTemp(), tempValue);
-   Lcd_Out(4, 1, tempValue);
-   Lcd_Chr(3, 8, "\xDFC");
+   
+
+   tempV = getTemp();
+   IntToStr(tempV/10, tempValue);
+   Lcd_Out(1, 1, Ltrim(tempValue));
+   Lcd_Chr_Cp('.');
+   IntToStr(tempV%10, tempValue);
+   Lcd_Out_Cp(Ltrim(tempValue));
+   Lcd_Out_Cp("\xDFC");
    //Lcd_Chr(4, 6, getKeypadInput());
    delay_ms(100);
 }
