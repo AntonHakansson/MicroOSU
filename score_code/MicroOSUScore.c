@@ -14,6 +14,7 @@ sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
 
+int getTemp();
 void initialize();
 void update();
 char getKeypadInput();
@@ -32,9 +33,10 @@ void initialize() {
    OSCCON = 0b01110111;            // Oscillator 8 MHz (Oscillator control)
    ANSEL = 0b00000010;             // No analog inputs
    ANSELH = 0b00000000;            // No ADC converter
+   //ADCON0.ADON = 1;
    ADCON1.VCFG0 = 1;
 
-   TRISA = 0b00000000;
+   TRISA = 0b11111111;
    TRISB = 0b00000000;
    TRISC = 0b11110000;
    PORTA = 0b00000000;
@@ -69,8 +71,8 @@ void initialize() {
 }
 
 int getTemp() {
-  double temp;
-  temp = (ADC_READ(1)/1024.0)*5000.0;
+  double temp = ADC_Read(1) >> 2;
+  temp = (temp/1024.0)*5000.0;
   return temp/10.0;
 }
 char tempValue[7];
@@ -96,7 +98,7 @@ void update() {
    else Lcd_Chr(4, 3, '0');
    if(PORTC.F7) Lcd_Chr(4, 4, '1');
    else Lcd_Chr(4, 4, '0');*/
-   
+
 
    tempV = getTemp();
    IntToStr(tempV/10, tempValue);
@@ -106,7 +108,7 @@ void update() {
    Lcd_Out_Cp(Ltrim(tempValue));
    Lcd_Out_Cp("\xDFC");
    //Lcd_Chr(4, 6, getKeypadInput());
-   delay_ms(100);
+   delay_ms(1000);
 }
 
 char getKeypadInput() {
