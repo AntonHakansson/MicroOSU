@@ -31,7 +31,7 @@ void initialize() {
 
    INTCON = 0;
    OSCCON = 0b01110111;            // Oscillator 8 MHz (Oscillator control)
-   ANSEL = 0b00000010;             // No analog inputs
+   ANSEL = 0b11111111;             // No analog inputs
    ANSELH = 0b00000000;            // No ADC converter
    //ADCON0.ADON = 1;
    ADCON1.VCFG0 = 1;
@@ -65,33 +65,53 @@ void initialize() {
    LCD_Cmd(128);
    LCD_RS = 1;
 
-   Lcd_Out(1, 1, "Score: ");
-   Lcd_Out(1, 8, "1337");
+   //Lcd_Out(1, 1, "Score: ");
+   //Lcd_Out(1, 8, "1337");
 
 }
 
+double temp;
 int getTemp() {
-  double temp = ADC_Read(1) >> 2;
+  temp = ADC_Read(1) >> 2;
   temp = (temp/1024.0)*5000.0;
   return temp;
   //return temp/10.0;
 }
-char tempValue[7];
-unsigned int tempV;
-char a, b, c, d;
-char* testText = "00.0";
+char tempValue[16];
+unsigned tempV;
+float tempDec;
 
 void update() {
-
-    char i;
+    int pow;
+    int i, digit;
     Lcd_Cmd(_LCD_CLEAR);
-    for(i=0; i<5; i++) {
-        LCD_Chr(2, i+1, 49+i);
-    }
+    
+   tempV = ADC_Read(1) >> 2;
+   //tempDec = tempV * 0.4706;
+   tempDec = tempV * 0.19607;
+   tempV = tempDec;
+   //tempV /= 1000;
+   //tempV = 1397;
+   
+   FloatToStr(tempDec, tempValue);
+   Lcd_Out_Cp(tempValue);
+   //Lcd_Out(1, 1, Ltrim(tempValue));
+   
+   //IntToStr(tempV/10, tempValue);
+   //Lcd_Out(1, 1, Ltrim(tempValue));
+   //Lcd_Chr_Cp('.');
+   //IntToStr(tempV%10, tempValue);
+   //Lcd_Out_Cp(Ltrim(tempValue));
+   //Lcd_Out_Cp("\xDFC");
 
-    for(i=0; i<5; i++) {
-        LCD_Chr(3, 1+i, 65+i);
-    }
+   pow = 1000;
+   tempV %= 10000;
+   for(i = 0; i < 4; i++) {
+     digit = tempV / pow;
+     Lcd_Chr(2, i+1, digit + '0');
+     tempV -= pow * digit;
+     pow /= 10;
+   }
 
    /*if(PORTC.F4) Lcd_Chr(4, 1, '1');
    else Lcd_Chr(4, 1, '0');
@@ -101,28 +121,6 @@ void update() {
    else Lcd_Chr(4, 3, '0');
    if(PORTC.F7) Lcd_Chr(4, 4, '1');
    else Lcd_Chr(4, 4, '0');*/
-
-
-   tempV = getTemp();
-   IntToStr(tempV/10, tempValue);
-   Lcd_Out(1, 1, Ltrim(tempValue));
-   Lcd_Chr_Cp('.');
-   IntToStr(tempV%10, tempValue);
-   Lcd_Out_Cp(Ltrim(tempValue));
-   Lcd_Out_Cp("\xDFC");
-
-   a = tempV + '48';
-   b = tempV%10 + '48';
-   c = tempV%100 + '48';
-   d = tempV%1000 + '48';
-   Lcd_out(1, 4, testText[0]);
-   Lcd_out(1, 5, testText[1]);
-   Lcd_out(1, 6, testText[2]);
-   Lcd_out(1, 7, testText[3]);
-   Lcd_Out(2, 6, a);
-   Lcd_Out(2, 7, b);
-   Lcd_Out(3, 6, c);
-   Lcd_Out(3, 7, d);
 
    //Lcd_Chr(4, 6, getKeypadInput());
    delay_ms(1000);
